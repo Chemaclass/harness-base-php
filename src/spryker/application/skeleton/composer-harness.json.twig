@@ -3,7 +3,7 @@
   "description": "Spryker site for {{ @('workspace.name')|lower }}",
   "type": "project",
   "require": {
-    "php": ">= 7.4"
+    "php": ">= {{ @('php.version') }}"
   },
   "require-dev": {
     "behat/behat": "^3.10",
@@ -59,11 +59,18 @@
     "test-acceptance": [
       "true"
     ],
-    "compatibility": "bin/phpcs -s --standard=vendor/phpcompatibility/php-compatibility/PHPCompatibility/ --runtime-set testVersion 7.4-"
+    "compatibility": "bin/phpcs -s --standard=vendor/phpcompatibility/php-compatibility/PHPCompatibility/ --runtime-set testVersion {{ @('php.version') }}-",
+    "phpstan": [
+      "php -d memory_limit=1024M vendor/bin/phpstan analyze -c phpstan.neon src/ -l 5"
+    ]
   },
   "config": {
     "platform": {
-      "php": "7.4.10"
+      "php": "{{ @('php.version') }}"
+    },
+    "allow-plugins": {
+      "dealerdirect/phpcodesniffer-composer-installer": true,
+      "sllh/composer-versions-check": true
     }
   },
   "repositories": [

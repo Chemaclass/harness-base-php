@@ -4,6 +4,33 @@ In addition to the README's [Harness Upgrade Instructions], please note these sp
 
 ## Upgrading from 1.2.x to 1.3.x
 
+### Kubernetes Ingress v1
+Cloud Kubernetes providers such as Digitial Ocean will be forcing upgrades of Kubernetes to 1.22 in a few months, and will obsolete, amongst other things, Ingress extensions/v1beta1 and networking.k8s.io/v1beta1 apiVersions.
+
+This release includes an upgrade from networking.k8s.io/v1beta1 to networking.k8s.io/v1 apiVersion of Ingress resources to handle that.
+
+Care is needed to ensure GitOps cluster deploy tools can handle this, which includes ArgoCD needing to be at least version 1.8, due to a bug in applying networking.k8s.io/v1 Ingresses failing.
+
+### All projects with admins
+Since it can be a forgotten step to change the password of the default admin users when created, the default password is now only set on local development environments.
+
+In order to deploy to new environments, an environment secret `ADMIN_DEFAULT_PASSWORD` will need setting on the `console` service. Do not use the original default password.
+
+It is optional now to change the password after, if a secure password is used, however it can be more secure doing so and removing `ADMIN_DEFAULT_PASSWORD` after first deployment.
+
+### MySQL
+
+We are switching back to Docker Inc's official mysql for arm64 computers, as it now supports arm64 on 8.0-oracle tag. This was also done because Oracle's mysql-server repository changed it's image publishing structure to no longer be multi-platform images.
+
+You can switch to any of the previous settings setting:
+
+e.g. to Docker Inc's official mysql 5.7 (with no arm64 support)
+```
+attribute('mysql.tag'): 5.7
+# since it's a multi-platform image of only one platform
+attribute('services.mysql.platform'): linux/amd64 
+```
+
 ### Spryker
 With support for Spryker 202108.0 release, we have upgraded the Elasticsearch version to 7.x and also there is a change in
 Zed application's root directory (Spryker now supports different entrypoints for backoffice and Zed gateway applications).

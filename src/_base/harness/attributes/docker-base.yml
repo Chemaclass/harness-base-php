@@ -43,6 +43,8 @@ attributes:
         memory: "100Mi"
     console:
       enabled: true
+      extends:
+        - php-base
       image: = @('docker.repository') ~ ':' ~ @('app.version') ~ '-console'
       publish: true
       build:
@@ -53,17 +55,22 @@ attributes:
         HAS_VARNISH: "= @('services.varnish.enabled') ? 'true' : 'false'"
       environment_secrets:
         DB_ADMIN_PASS: = @('database.root_pass')
+        ADMIN_DEFAULT_PASSWORD: admin123
       resources:
         memory: "2048Mi"
         init_memory: "1024Mi"
         migrate_memory: "1024Mi"
     cron:
+      extends:
+        - php-base
       enabled: "= 'cron' in @('app.services')"
       image: = @('docker.repository') ~ ':' ~ @('app.version') ~ '-cron'
       publish: "= @('services.cron.enabled')"
       resources:
         memory: "1024Mi"
     php-fpm:
+      extends:
+        - php-base
       enabled: true
       image: = @('docker.repository') ~ ':' ~ @('app.version') ~ '-php-fpm'
       publish: true

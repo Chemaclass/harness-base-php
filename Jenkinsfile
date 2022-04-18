@@ -1,5 +1,5 @@
 pipeline {
-    agent { label 'my127ws' }
+    agent { label 'linux-amd64' }
     environment {
         COMPOSE_DOCKER_CLI_BUILD = 1
         DOCKER_BUILDKIT = 1
@@ -24,10 +24,10 @@ pipeline {
                     // Choose a different agent to our "main" one
                     agent {
                        docker {
-                            label 'my127ws'
+                            label 'linux-amd64'
                             alwaysPull true
                             image 'quay.io/inviqa_images/workspace:latest'
-                            args '--entrypoint "" --volume /var/run/docker.sock:/var/run/docker.sock --volume "$HOME/.my127:/root/.my127"'
+                            args '--group-add docker --entrypoint "" --volume /var/run/docker.sock:/var/run/docker.sock --volume "$HOME/.my127:/root/.my127"'
                         }
                     }
                     stages {
@@ -136,10 +136,10 @@ pipeline {
                     // Choose a different agent to our "main" one
                     agent {
                         docker {
-                            label 'my127ws'
+                            label 'linux-amd64'
                             alwaysPull true
                             image 'quay.io/inviqa_images/workspace:latest'
-                            args '--entrypoint "" --volume /var/run/docker.sock:/var/run/docker.sock --volume "$HOME/.my127:/root/.my127"'
+                            args '--group-add docker --entrypoint "" --volume /var/run/docker.sock:/var/run/docker.sock --volume "$HOME/.my127:/root/.my127"'
                         }
                     }
                     stages {
@@ -227,10 +227,10 @@ pipeline {
                         docker {
                             // Reuse the same agent selected at the top of the file
                             reuseNode true
-                            label 'my127ws'
+                            label 'linux-amd64'
                             alwaysPull true
                             image 'quay.io/inviqa_images/workspace:latest'
-                            args '--entrypoint "" --volume /var/run/docker.sock:/var/run/docker.sock --volume "$HOME/.my127:/root/.my127"'
+                            args '--group-add docker --entrypoint "" --volume /var/run/docker.sock:/var/run/docker.sock --volume "$HOME/.my127:/root/.my127"'
                         }
                     }
                     stages {
